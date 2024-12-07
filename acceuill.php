@@ -136,7 +136,7 @@
         
         <div class="navbar">
             
-            <a href="acceuill.php"><img src="Capture_d_écran_2024-12-03_011855-removebg-preview.png" class="logo"></a>
+            <a href="acceuill.php"><img src="images/Capture_d_écran_2024-12-03_011855-removebg-preview.png" class="logo"></a>
         </div>
     
         <div class="content">
@@ -144,8 +144,8 @@
             <h1>Bienvenue dans E-Services</h1>
             
             <div>
-                <a href="Student.php"><button type="button"><span></span>Etudiant</button></a>
-                <a href="connexion.php"><button type="button"><span></span>Administrateur</button></a>
+                <a href="etudient/Student.php"><button type="button"><span></span>Etudiant</button></a>
+                <a href="administrateur/connexion.php"><button type="button"><span></span>Administrateur</button></a>
             </div> 
         </div>
     </div>
