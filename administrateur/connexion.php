@@ -1,11 +1,9 @@
 <?php
+
 session_start();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
 
-    $servername = "localhost";
+$servername = "localhost";
     $username_db = "root";
     $password_db = "";
     $dbname = "services";
@@ -15,9 +13,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Connection failed: " . $conn->connect_error);
     }
 
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $email = isset($_POST['email']) ? trim(htmlspecialchars($_POST['email'])) : '';
+    $password = isset($_POST['password']) ? trim(htmlspecialchars($_POST['password'])) : '';
+
+    
+
     $sql = "SELECT * FROM administrateurs WHERE email = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('s', $username);
+    $stmt->bind_param('s', $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -29,23 +33,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $stored_password) || $password === $stored_password) {
            
             $_SESSION['user_id'] = $user_data['id_admin'];
-            $_SESSION['username'] = $username;
+            $_SESSION['username'] = $email;
 
           
             if ($password === $stored_password) {
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
                 $update_sql = "UPDATE administrateurs SET mot_de_passe = ? WHERE email = ?";
                 $update_stmt = $conn->prepare($update_sql);
-                $update_stmt->bind_param('ss', $hashed_password, $username);
+                $update_stmt->bind_param('ss', $hashed_password, $email);
                 $update_stmt->execute();
             }
 
-           
-            
-                header("Location:admindashboard.php");
-                exit();
+            echo json_encode(["status" => "success", "redirect" => "admindashboard.php"]);
+            exit();
            
         } 
+    }else{
+        echo json_encode(["status" => "error", "message" => "Mot de passe incorrect"]);
     }
 
     $conn->close();
@@ -191,6 +195,30 @@ font-size: 20px;
     text-decoration: underline;
     }
 
+    .feedback {
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: block;
+}
+
+.input-box .invalide {
+            border: 2px solid red;
+        }
+        .input-box.valide {
+            border: 2px solid green;
+        }
+        #submitButton:disabled {
+            background-color: gray;
+            cursor: not-allowed;
+        }
+        span.error {
+            color: red;
+            font-size: 12px;
+        }
+        .reponse{
+           color:#fff; 
+        }
+
    
 </style>
 </head>
@@ -202,16 +230,20 @@ font-size: 20px;
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" >
             <h1>Login</h1>
             <div class="input-box">
-                <input type="text" name="username" placeholder="email" required>
+                <input type="text" name="email" placeholder="email" id="email" required>
                 <i class='bx bxs-envelope'></i>
+                <span id="email_error" class="error"></span>
             </div>
             <div class="input-box">
-                <input type="password" name="password" placeholder="mot de passe" required>
+                <input type="password" name="password" placeholder="mot de passe" id="password" required>
                 <i class='bx bxs-lock-alt'></i>
             </div>
 
-            <button type="submit" class="btn">Connexion</button>
+            <button type="submit" class="btn" id="submitButton" disabled>Connexion</button>
         </form>
+        <div id="response"></div>
     </div>
+    <script src="scriptconnexion.js">
+</script>
 </body>
 </html>

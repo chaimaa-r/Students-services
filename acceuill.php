@@ -136,7 +136,7 @@
         
         <div class="navbar">
             
-            <a href="acceuill.php"><img src="images/Capture_d_écran_2024-12-03_011855-removebg-preview.png" class="logo"></a>
+            <a href="acceuill.php"><img src="Capture_d_écran_2024-12-03_011855-removebg-preview.png" class="logo"></a>
         </div>
     
         <div class="content">
