@@ -115,30 +115,44 @@ typeDocumentSelect.addEventListener("change", function () {
             
         });
         
-        document.getElementById('submitButton').addEventListener('click', function(event) {
+        document.getElementById('submitButton').addEventListener('click', function (event) {
             event.preventDefault(); // Empêche le rechargement de la page
         
+            // Récupération des champs de base
             const name = document.getElementById('nom').value;
             const email = document.getElementById('email').value;
-            const numero_appoge = document.getElementById('numero_apogee').value;
+            const numero_apogee = document.getElementById('numero_apogee').value;
             const prenom = document.getElementById('prenom').value;
             const cin = document.getElementById('CIN').value;
             const type_document = document.getElementById('type_document').value;
         
+            // Récupération des champs dynamiques (si "Convention de stage" est sélectionnée)
+            let additionalData = '';
+            if (type_document === 'Convention de stage') {
+                const entreprise = document.getElementById('entreprise')?.value || '';
+                const duree_stage = document.getElementById('duree_stage')?.value || '';
+                const sujet_stage = document.getElementById('sujet_stage')?.value || '';
+                const localisation = document.getElementById('localisation')?.value || '';
+                const encadrant_entreprise = document.getElementById('encadrant_entreprise')?.value || '';
+                const encadrant_ecole = document.getElementById('encadrant_ecole')?.value || '';
+        
+                // Ajouter les champs dynamiques à la requête
+                additionalData = `&entreprise=${encodeURIComponent(entreprise)}&duree_stage=${encodeURIComponent(duree_stage)}&sujet_stage=${encodeURIComponent(sujet_stage)}&localisation=${encodeURIComponent(localisation)}&encadrant_entreprise=${encodeURIComponent(encadrant_entreprise)}&encadrant_ecole=${encodeURIComponent(encadrant_ecole)}`;
+            }
+        
+            // Envoi de la requête AJAX
             const xhr = new XMLHttpRequest();
             xhr.open('POST', 'Studentdemande.php', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         
-            xhr.onload = function() {
+            xhr.onload = function () {
                 if (xhr.status === 200) {
                     document.getElementById('response').innerText = xhr.responseText;
                 } else {
                     console.error('Erreur lors de l\'envoi de la requête :', xhr.status);
                 }
             };
-            
         
-            xhr.send(`nom=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}
-            &numero_apogee=${encodeURIComponent(numero_appoge)}&prenom=${encodeURIComponent(prenom)}
-            &CIN=${encodeURIComponent(cin)}&type_document=${encodeURIComponent(type_document)}`);
+            xhr.send(`nom=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&numero_apogee=${encodeURIComponent(numero_apogee)}&prenom=${encodeURIComponent(prenom)}&CIN=${encodeURIComponent(cin)}&type_document=${encodeURIComponent(type_document)}${additionalData}`);
         });
+        

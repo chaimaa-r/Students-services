@@ -59,6 +59,8 @@ if (empty($name) || empty($email) || empty($prenom) || empty($numero_apogee) || 
             $stmt_insert = $conn->prepare("INSERT INTO demandes 
                 (id_etudiant, etat_demande, type_document, lieu_stage, encadrant_ecole, encadrant_entreprise, dure_stage, sujet_stage, entreprise) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                
+
             $stmt_insert->bind_param("isssssiss", $id_etudiant, $etat_demande, $type_document, $localisation, $encadrant_ecole, $encadrant_entreprise, $dure_stage, $sujet_stage, $entreprise);
         } elseif (in_array($type_document, ["Attestation de réussite", "Attestation de scolarité", "Relevé de notes"])) {
             $stmt_insert = $conn->prepare("INSERT INTO demandes 
