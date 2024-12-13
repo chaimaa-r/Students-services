@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Préparer la requête AJAX
         const xhr = new XMLHttpRequest();
-        xhr.open("POST", "/Genie_Logiciel1/administrateur/connexion.php", true);
+        xhr.open("POST", "/Students-services/administrateur/connexion.php", true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
         xhr.onload = function () {
